@@ -6,19 +6,28 @@ const PropuestaSchema=Schema({
 
     titulo:{
         type:String,
-        required:[true,'El titul es obligatorio']
+        required:[true,'El titulo es obligatorio']
     },
     tags:[{
         type:String
     }],
     introduccion:{
         type:String,
-        required:[true,'La introducciòn es obligatorio']
     },
     descripcion:{
         type:String,
         required:[true,'La descripciòn es obligatorio']
+    },
+    propuesta:{
+        type:String,
+        required:[true,'La propuesta es obligatorio']
+    },
+    fecha:{
+        type:Date,
+        required:[true,'La fecha es obligatorio']
     }
+    // like, dislike, falta mejorar, usuario
+    
 
 })
 
