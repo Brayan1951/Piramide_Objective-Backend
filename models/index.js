@@ -1,6 +1,8 @@
 const Propuesta = require('./propuesta');
+const Usuario = require('./usuario');
 const Server = require('./server');
 
 module.exports={
-    Propuesta,Server
+    Server,Propuesta,
+    Usuario
 }

@@ -9,23 +9,24 @@ class Server {
 
     this.paths = {
       propuestas: "/api/propuestas",
+      usuarios: "/api/usuarios",
+      auth: "/api/auth",
     };
 
     // conectar a mongoDB
-    this.conectarDB()
+    this.conectarDB();
 
     // Middlewares
-    this.middlewares()
+    this.middlewares();
 
     // Rutas de la app
-    this.routes()
+    this.routes();
   }
 
-
-  async conectarDB(){
-    await dbConnection()
+  async conectarDB() {
+    await dbConnection();
   }
-  
+
   middlewares() {
     // cors
     this.app.use(cors());
@@ -38,6 +39,8 @@ class Server {
   }
   routes() {
     this.app.use(this.paths.propuestas, require("../routes/propuesta"));
+    this.app.use(this.paths.usuarios, require("../routes/usuario"));
+    this.app.use(this.paths.auth, require("../routes/auth"));
   }
 
   listen() {
