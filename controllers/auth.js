@@ -1,5 +1,5 @@
 const bcryptjs = require("bcryptjs");
-const { response } = require("express");
+const { response, request } = require("express");
 const { generarJWT } = require("../helpers");
 const { Usuario } = require("../models");
 
@@ -46,6 +46,13 @@ const login = async (req, res = response) => {
   }
 };
 
+const renovarToken = async (req = request, res = response) => {
+  const { usuario } = req;
+  const token = await generarJWT(usuario.id);
+  res.json({ usuario, token });
+};
+
 module.exports = {
   login,
+  renovarToken,
 };

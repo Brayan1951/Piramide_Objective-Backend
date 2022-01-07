@@ -30,7 +30,22 @@ const Createusuario = async (req, res = response) => {
   });
 };
 
+const DeleteUsuario = async (req, res = response) => {
+  const { id } = req.params;
+  try {
+    const updateUser = await Usuario.findByIdAndUpdate(id, { estado: false });
+
+    res.send({ msg: `el usuario con id ${id} se elimino correctamente` });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({
+      msg: "Hable con el administrador",
+    });
+  }
+};
+
 module.exports = {
   Obtenerusuarios,
   Createusuario,
+  DeleteUsuario,
 };
