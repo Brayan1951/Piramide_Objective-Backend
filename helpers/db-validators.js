@@ -1,4 +1,4 @@
-const { Usuario } = require("../models");
+const { Usuario, Propuesta } = require("../models");
 
 const emailExiste = async (correo = "") => {
   const existe = await Usuario.findOne({ correo });
@@ -14,7 +14,15 @@ const UserExiste = async (id = "") => {
   }
 };
 
+const propeuestaExiste = async (id = "") => {
+  const idPropuesta = await Propuesta.findById(id);
+  if (!idPropuesta) {
+    throw new Error(`La propuesta con ${id} no esta registrado en la DB`);
+  }
+};
+
 module.exports = {
   emailExiste,
   UserExiste,
+  propeuestaExiste,
 };

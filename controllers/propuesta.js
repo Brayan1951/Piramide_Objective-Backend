@@ -1,43 +1,66 @@
-const { response } = require('express');
-const {Propuesta} = require('../models');
+const { response } = require("express");
+const { Propuesta } = require("../models");
 
-
-const obtenerPropuestas=async(req,res=response)=>{
-
-const [total,propuestas]=await Promise.all([
+const obtenerPropuestas = async (req, res = response) => {
+  const [total, propuestas] = await Promise.all([
     Propuesta.countDocuments(),
-    Propuesta.find()
-])
+    Propuesta.find(),
+  ]);
 
+  res.json({
+    total,
+    propuestas,
+  });
+};
 
-res.json({
-    total,propuestas
-})
+const Createdpropuesta = async (req, res = response) => {
+  const { titulo, tags, introduccion, descripcion, propuesta } = req.body;
 
-}
+  const propuestaDB = await Propuesta.findOne({ titulo });
+  if (propuestaDB) {
+    return res.status(400).json({
+      msg: `La propuesta con titulo ${titulo} ya existe`,
+    });
+  }
 
+  const fecha = new Date().toUTCString();
 
-const Createdpropuesta=async(req,res=response)=>{
+  const data = {
+    titulo,
+    tags,
+    introduccion,
+    descripcion,
+    propuesta,
+    fecha,
+    usuario: req.usuario._id,
+  };
+  const propuestacreatedb = new Propuesta(data);
+  propuestacreatedb.save();
 
-    const {titulo,tags,introduccion,descripcion,propuesta}=req.body
-    const fecha=new Date().toUTCString()
+  res.status(201).json({ propuestacreatedb });
+};
 
-    const data={
-        titulo,tags,introduccion,descripcion,propuesta,fecha
-    }
-    const propuestadb=new Propuesta(data)
-    propuestadb.save()
+const motivarPropuesta = async (req, res = response) => {
+  const { id } = req.params;
+  const propuestadb = await Propuesta.findById(id);
+  const cant = propuestadb.bueno + 1;
+  //   res.send(propuestadb);
+  //   console.log(propuestadb.bueno);
+  try {
+    const propuestadb = await Propuesta.findByIdAndUpdate(id, {
+      bueno: cant,
+    });
+    res.status(200).send({ propuestadb });
+  } catch (error) {
+    console.log(error);
+    throw new Error({
+      nsg: "Hable con el administrador",
+    });
+  }
+};
 
-    res.status(201).json({propuestadb})
-
-
-}
-
-
-
-
-
-module.exports={
-    obtenerPropuestas,
-    Createdpropuesta
-}
+module.exports = {
+  obtenerPropuestas,
+  Createdpropuesta,
+  motivarPropuesta,
+};
